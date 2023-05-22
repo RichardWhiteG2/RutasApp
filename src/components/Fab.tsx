@@ -22,6 +22,9 @@ interface Props{
                 name={iconName}
                 color='white'
                 size={35}
+                style={{
+                    left:1
+                }}
             />
 
         </TouchableOpacity>
@@ -41,7 +44,7 @@ interface Props{
          shadowColor:'#000',
          shadowOffset:{
              width:0,
-             height:3
+             height:3 
          },
          shadowOpacity:0.27,
          shadowRadius:4.65,
