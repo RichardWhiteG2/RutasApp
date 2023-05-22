@@ -1,22 +1,18 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import MapView, { Marker } from 'react-native-maps'
-import Geolocation from '@react-native-community/geolocation';
+import { useLocation } from '../hooks/useLocation';
+import { LoadingScreen } from '../screens/LoadingScreen';
 
+interface Props{
+    markers?: typeof Marker[];
+}
 
-export const Map = () => {
+export const Map = ({markers}: Props) => {
+    const {hasLocation, initialPosition} = useLocation();
     
-    useEffect(() => {
-      Geolocation.getCurrentPosition(
-        info => console.log(info),
-        (err)=> console.log({err}),
-        {
-             enableHighAccuracy:true
-        }
-
-        );
-    
-  }, [])
-  
+    if( !hasLocation){
+        return <LoadingScreen/>
+    }
   return (
     <>
         <MapView
@@ -24,8 +20,8 @@ export const Map = () => {
         showsUserLocation 
         style={{flex:1}}
         initialRegion={{
-          latitude: 37.33023256,
-          longitude: -122.02344987,
+          latitude: initialPosition.latitude,
+          longitude: initialPosition.longitud,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
@@ -33,8 +29,8 @@ export const Map = () => {
             {/* <Marker
                 image={ require("../assets/custom-marker.png")}
                 coordinate= {{
-                    latitude: 37.78825,
-                    longitude: -122.4324,
+                    latitude: 37.33023256,
+                    longitude: -122.02344987,
                 }}
                 title='Esto es un titulo'
                 description="Description"
