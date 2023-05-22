@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import MapView, { Marker } from 'react-native-maps'
 import { useLocation } from '../hooks/useLocation';
 import { LoadingScreen } from '../screens/LoadingScreen';
@@ -9,8 +9,32 @@ interface Props{
 }
 
 export const Map = ({markers}: Props) => {
-    const {hasLocation, initialPosition, getCurrentLocation} = useLocation();
+    const {
+        hasLocation, 
+        initialPosition, 
+        getCurrentLocation, 
+        followUserLocation,userLocation
+      } = useLocation();
     const mapViewRef = useRef<MapView>();
+
+    useEffect(() => {
+        followUserLocation();
+        return()=>{
+             //TODO: cancelar seguimiento.
+        }
+    }, [])
+
+
+    useEffect(() => {
+
+        const {latitude, longitude }=userLocation;
+        mapViewRef.current?.animateCamera({
+            center:{latitude, longitude}
+       });  
+    
+      
+    }, [userLocation ])
+    
 
     const centerPosition= async ()=>{
 
@@ -50,7 +74,7 @@ export const Map = ({markers}: Props) => {
             iconName={'compass-outline'} 
             onPress={centerPosition}
             style={{
-                position:'absolute',
+                position:'absolute', 
                 bottom:10,
                 right:10
             }}          
